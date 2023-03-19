@@ -14,5 +14,3 @@ def fun(d):
 
   # Insert above records in the collection
   collection.insert_one(d)
-
-
