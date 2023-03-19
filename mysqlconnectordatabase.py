@@ -2,12 +2,40 @@ import mysql.connector as con
 import os
 
 
-def fun():
-  planetscaledb = con.connect(host=os.environ['planetscaledbhost'],
-                              user=os.environ['planetscaledbuser'],
-                              password=os.environ['planetscaledbpasswd'],
-                              database=os.environ['planetscaledbname'])
-  pscur = planetscaledb.cursor(dictionary=True)
-  pscur.execute("select * from jobs")
-  result = pscur.fetchall()
-  return result
+class db:
+
+  def __init__(self):
+    self.planetscaledb = con.connect(
+      host=os.environ['planetscaledbhost'],
+      user=os.environ['planetscaledbuser'],
+      password=os.environ['planetscaledbpasswd'],
+      database=os.environ['planetscaledbname'])
+
+  def cursorcon(self):
+    self.pscur = self.planetscaledb.cursor(dictionary=True)
+    return self.pscur
+
+  def fun(self):
+    cur = self.cursorcon()
+    cur.execute("select * from jobs")
+    result = cur.fetchall()
+    return result
+
+  def loadjob(self, id):
+    cur = self.cursorcon()
+    cur.execute(f'select * from jobs where id={id}')
+    result = cur.fetchone()
+    
+    return result
+
+  def apptodb(self, id, data):
+    cur = self.cursorcon()
+    cur.execute(
+      f'''INSERT INTO applications (job_id, full_name, email, linkedin_url, education, work_experience, resume_url) VALUES ({id}, {data["full_name"]},{data["email"]},{data["linkedin_url"]},{data["education"]},{data["work_experience"]},{data["resume_url"]}'''
+    )
+
+
+if __name__ == "__main__":
+  d = db()
+  a = d.loadjob(2)
+  print(a)
