@@ -16,4 +16,3 @@ def fun(d):
   collection.insert_one(d)
 
 
-fun({"hello": "hi"})
