@@ -40,7 +40,8 @@ def jobpage(id):
 @app.route('/job/<id>/apply', methods=['post'])
 def jobapp(id):
   print(request.form)
-  data = dict(request.form)
+  data = request.form
+  #data = dict(request.form) it is used for pymongo also used for mysql
   job = d.loadjob(id)
   #job = load_job_from_db(id)
   d.apptodb(id, data)
