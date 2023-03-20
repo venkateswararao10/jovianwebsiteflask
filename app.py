@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from mysqlconnectordatabase import db
 
-from pymongocon import fun
+#from pymongocon import fun
 '''jobs=[
   {'id':1,'title':'Data-scientist','location':'Bengaluru','salary':'Rs 20,00,000'},
   {'id':2,'title':'Data-Analyst','location':'Delhi','salary':'Rs 10,00,000'},
@@ -39,10 +39,12 @@ def jobpage(id):
 
 @app.route('/job/<id>/apply', methods=['post'])
 def jobapp(id):
+  print(request.form)
   data = dict(request.form)
   job = d.loadjob(id)
   #job = load_job_from_db(id)
-  fun(data)
+  d.apptodb(id, data)
+  #fun(data)
   return render_template('applicationsubmitted.html',
                          application=data,
                          job=job)

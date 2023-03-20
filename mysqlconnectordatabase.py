@@ -25,14 +25,18 @@ class db:
     cur = self.cursorcon()
     cur.execute(f'select * from jobs where id={id}')
     result = cur.fetchone()
-    
+
     return result
 
   def apptodb(self, id, data):
     cur = self.cursorcon()
-    cur.execute(
-      f'''INSERT INTO applications (job_id, full_name, email, linkedin_url, education, work_experience, resume_url) VALUES ({id}, {data["full_name"]},{data["email"]},{data["linkedin_url"]},{data["education"]},{data["work_experience"]},{data["resume_url"]}'''
-    )
+    text = "INSERT INTO applications (job_id, full_name, email, linkedin_url, education, work_experience, resume_url) VALUES (%s,%s,%s,%s,%s,%s,%s)"
+
+    d = list(data.values())
+    d.insert(0, id)
+
+    cur.execute(text, d)
+    self.planetscaledb.commit()
 
 
 if __name__ == "__main__":
